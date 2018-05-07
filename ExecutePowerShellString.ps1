@@ -4,15 +4,19 @@ Throw "This is a demo, dummy!"
 #region clean
 Function Prompt(){}
 Clear-Host
-$singleLine = $multiLine = $null
+$singleCommand = $multiLine = $null
 $multiLineScriptBlock = $null
 #endregion
 
-#region single line
-Get-Process PowerShell | Format-Table Name,Id
-$singleLine = "Get-Process PowerShell | Format-Table Name,Id"
-$singleLine
+#region ampersand
+Get-Process PowerShell
+$singleCommand = "Get-Process PowerShell"
+$singleCommand
 #region spoiler
+& $singleCommand
+#endregion
+#region single line
+$singleLine = "Get-Process PowerShell | Format-Table Name,Id"
 & $singleLine
 #endregion
 #endregion
