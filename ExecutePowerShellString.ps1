@@ -16,7 +16,8 @@ $singleCommand
 & $singleCommand
 
 #region args
-$arg = "PowerShell"
+$arg = "powershell"
 & $singleCommand $arg
+Get-Process powershell
 #endregion
 #endregion
