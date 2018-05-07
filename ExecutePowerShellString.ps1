@@ -16,4 +16,8 @@ $singleCommand
 #region spoiler
 & $singleCommand
 #endregion
+#region limitations
+$singleLine = "Get-Process -Name PowerShell"
+& $singleLine
+#endregion
 #endregion
