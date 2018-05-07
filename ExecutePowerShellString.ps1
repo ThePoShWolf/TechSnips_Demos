@@ -1,7 +1,6 @@
 #region demo
 Throw "This is a demo, dummy!"
 #endregion
-
 #region clean
 Function Prompt(){}
 Clear-Host
@@ -10,7 +9,7 @@ $multiLineScriptBlock = $null
 #endregion
 
 #region single line
-$singleLine = "Get-Process"
+$singleLine = "Get-Process PowerShell | Format-Table Name,Id"
 & $singleLine
 #endregion
 
