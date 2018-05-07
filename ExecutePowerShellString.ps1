@@ -11,7 +11,10 @@ $multiLineScriptBlock = $null
 #region single line
 Get-Process PowerShell | Format-Table Name,Id
 $singleLine = "Get-Process PowerShell | Format-Table Name,Id"
+$singleLine
+#region spoiler
 & $singleLine
+#endregion
 #endregion
 
 Clear-Host
