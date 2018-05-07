@@ -8,7 +8,6 @@ $singleCommand = $arg = $null
 #endregion
 
 #region ampersand
-Get-Process
 $singleCommand = "Get-Process"
 ($singleCommand | Get-Member).TypeName[0]
 $singleCommand
