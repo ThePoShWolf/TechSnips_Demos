@@ -5,8 +5,8 @@ Throw "This is a demo, dummy!"
 Function Prompt(){}
 Clear-Host
 $proc = $null
-$multiLineCommand = $null
-$multiLineScriptBlock = $null
+$multiLineScript = $null
+$scriptBlock = $null
 #endregion
 
 #region multi line
@@ -18,7 +18,7 @@ If($proc.Count -gt 1){
 }Else{
     Write-Output "There are no PowerShell consoles running!"
 }
-$multiLineCommand = @'
+$multiLineScript = @'
 $proc = Get-Process PowerShell
 If($proc.Count -gt 1){
     Write-Output "There are $($proc.count) PowerShell consoles running!"
@@ -28,11 +28,11 @@ If($proc.Count -gt 1){
     Write-Output "There are no PowerShell consoles running!"
 }
 '@
-($multiLineCommand | Get-Member).TypeName[0]
-$multiLineCommand
+($multiLineScript | Get-Member).TypeName[0]
+$multiLineScript
 
 #region spoiler
-$multiLineScriptBlock = [scriptblock]::Create($multiLineCommand)
-Invoke-Command -ScriptBlock $multiLineScriptBlock
+$scriptBlock = [scriptblock]::Create($multiLineScript)
+Invoke-Command -ScriptBlock $scriptBlock
 #endregion
 #endregion
