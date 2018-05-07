@@ -24,7 +24,7 @@ $singleLine = "Get-Process PowerShell"
 Clear-Host
 
 #region multi line
-Get-Process PowerShell
+$proc = Get-Process PowerShell
 If($proc.Count){
     Write-Output "There are $($proc.count) PowerShell consoles running!"
 }Else{
