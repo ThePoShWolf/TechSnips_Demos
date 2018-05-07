@@ -4,8 +4,7 @@ Throw "This is a demo, dummy!"
 #region clean
 Function Prompt(){}
 Clear-Host
-$singleCommand = $multiLine = $null
-$multiLineScriptBlock = $null
+$singleCommand = $singleLine = $null
 #endregion
 
 #region ampersand
