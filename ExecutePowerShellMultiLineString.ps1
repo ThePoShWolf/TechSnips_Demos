@@ -32,7 +32,7 @@ If($proc.Count -gt 1){
 $multiLineCommand
 
 #region spoiler
-$multiLineScriptBlock = [scriptblock]::Create($multiLine)
+$multiLineScriptBlock = [scriptblock]::Create($multiLineCommand)
 Invoke-Command -ScriptBlock $multiLineScriptBlock
 #endregion
 #endregion
