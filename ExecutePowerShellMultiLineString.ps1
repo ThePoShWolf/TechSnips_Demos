@@ -4,26 +4,31 @@ Throw "This is a demo, dummy!"
 #region clean
 Function Prompt(){}
 Clear-Host
-$singleCommand = $multiLine = $null
+$proc = $null
+$multiLineCommand = $null
 $multiLineScriptBlock = $null
 #endregion
 
 #region multi line
 $proc = Get-Process PowerShell
-If($proc.Count){
+If($proc.Count -gt 1){
     Write-Output "There are $($proc.count) PowerShell consoles running!"
-}Else{
+}ElseIf($proc.Count -eq 1){
     Write-Output "There is only one PowerShell console running!"
+}Else{
+    Write-Output "There are no PowerShell consoles running!"
 }
-$multiLine = @'
+$multiLineCommand = @'
 $proc = Get-Process PowerShell
-If($proc.Count){
+If($proc.Count -gt 1){
     Write-Output "There are $($proc.count) PowerShell consoles running!"
-}Else{
+}ElseIf($proc.Count -eq 1){
     Write-Output "There is only one PowerShell console running!"
+}Else{
+    Write-Output "There are no PowerShell consoles running!"
 }
 '@
-$multiLine
+$multiLineCommand
 
 #region spoiler
 $multiLineScriptBlock = [scriptblock]::Create($multiLine)
