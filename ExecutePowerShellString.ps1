@@ -9,7 +9,7 @@ $multiLineScriptBlock = $null
 #endregion
 
 #region ampersand
-Get-Process PowerShell
+Get-Process
 $singleCommand = "Get-Process"
 $singleCommand
 #region spoiler
