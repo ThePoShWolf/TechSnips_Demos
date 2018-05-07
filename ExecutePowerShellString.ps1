@@ -18,6 +18,8 @@ $multiLine = @'
 $proc = Get-Process PowerShell
 If($proc.Count){
     Write-Output "There are $($proc.count) PowerShell consoles running!"
+}Else{
+    Write-Output "There is only one PowerShell console running!"
 }
 '@
 & $multiLine
