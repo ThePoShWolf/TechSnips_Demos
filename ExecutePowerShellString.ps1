@@ -12,11 +12,10 @@ Get-Process
 $singleCommand = "Get-Process"
 $singleCommand
 
-#region spoiler
 & $singleCommand
-#endregion
-#region limitations
-$singleLine = "Get-Process -Name PowerShell"
-& $singleLine
+
+#region args
+$arg = "PowerShell"
+& $singleCommand $arg
 #endregion
 #endregion
