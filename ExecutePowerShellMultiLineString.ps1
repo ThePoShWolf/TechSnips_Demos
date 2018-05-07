@@ -28,6 +28,7 @@ If($proc.Count -gt 1){
     Write-Output "There are no PowerShell consoles running!"
 }
 '@
+($multiLineCommand | Get-Member).TypeName[0]
 $multiLineCommand
 
 #region spoiler
