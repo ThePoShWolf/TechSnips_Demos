@@ -34,6 +34,7 @@ If($proc.Count){
     Write-Output "There is only one PowerShell console running!"
 }
 '@
+$multiLine
 & $multiLine
 
 #region spoiler
