@@ -33,6 +33,7 @@ $multiLineScript
 
 #region spoiler
 $scriptBlock = [scriptblock]::Create($multiLineScript)
+($scriptBlock | Get-Member).TypeName[0]
 Invoke-Command -ScriptBlock $scriptBlock
 #endregion
 #endregion
