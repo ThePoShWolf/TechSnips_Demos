@@ -10,13 +10,13 @@ $multiLineScriptBlock = $null
 
 #region ampersand
 Get-Process PowerShell
-$singleCommand = "Get-Process PowerShell"
+$singleCommand = "Get-Process"
 $singleCommand
 #region spoiler
 & $singleCommand
 #endregion
 #region single line
-$singleLine = "Get-Process PowerShell | Format-Table Name,Id"
+$singleLine = "Get-Process PowerShell"
 & $singleLine
 #endregion
 #endregion
