@@ -21,7 +21,7 @@ Get-Module ActiveDirectory
 
 New-ADGroup -Name 'Star Wars Fans' -GroupScope Global
 
-Get-ADGroup 'Star Wars Fans'
+Get-ADGroup 'Star Wars Fans' | Select-Object Name,GroupScope,GroupCategory
 
 #endregion
 
@@ -29,12 +29,14 @@ Get-ADGroup 'Star Wars Fans'
 
 $NewGroup = @{
     'Name' = 'Star Trek Fans'
-    'GroupScope' = 'Global'
+    'GroupScope' = 'Universal'
     'GroupCategory' = 'Distribution'
     'Description' = 'Real Science Fiction'
     'SamAccountName' = 'STF'
 }
 New-ADGroup @NewGroup
 
-Get-ADGroup 'STF'
+$Properties = 'Name','GroupScope','GroupCategory','Description','SamAccountName'
+
+Get-ADGroup -Identity 'STF' -Properties $Properties | Select-Object $Properties
 #endregion
