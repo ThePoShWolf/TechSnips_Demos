@@ -9,7 +9,9 @@ Function Prompt(){}
 $zip.Dispose()
 Remove-Item $zipFile1Path -Confirm:$false
 Remove-Item $zipFile2Path -Confirm:$false
-Get-ChildItem $extractPath | Remove-Item -Confirm:$false -Recurse
+If(Test-Path $extractPath){
+    Get-ChildItem $extractPath | Remove-Item -Confirm:$false -Recurse
+}
 Clear-Host
 #endregion
 
