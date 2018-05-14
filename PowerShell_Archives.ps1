@@ -10,8 +10,10 @@ $zip.Dispose()
 Remove-Item $zipFile1Path -Confirm:$false
 Remove-Item $zipFile2Path -Confirm:$false
 Get-ChildItem $extractPath | Remove-Item -Confirm:$false -Recurse
+Clear-Host
 #endregion
 
+#region variables
 $zipFile1Path = 'C:\Temp\zip1.zip'
 $zipFile2Path = 'C:\Temp\zip2.zip'
 $toZipDir = 'C:\Temp\Zip'
@@ -20,11 +22,13 @@ $extractPath = 'C:\Temp\Extract'
 $file1 = 'C:\Temp\File1.txt'
 $file2 = 'C:\Temp\File2.txt'
 $file3 = 'C:\Temp\File3.txt'
+#endregion
 
 #region pre-5
 #region prereqs
 Add-Type -Assembly 'System.IO.Compression.FileSystem' #.NET 4.5
 #endregion
+
 #region create
 [System.IO.Compression.ZipFile]::CreateFromDirectory($toZipDir, $zipFile1Path)
 [IO.Compression.ZipFile]::OpenRead($zipFile1Path).Entries.Name
@@ -36,7 +40,7 @@ $zip.Dispose()
 #endregion
 
 #region update
-$compressionLevel = [System.IO.Compression.CompressionLevel]::Optimal #Fastest, NoCompression, Optimal
+$compressionLevel = [System.IO.Compression.CompressionLevel]::Fastest #Fastest, NoCompression, Optimal
 
 $zip = [System.IO.Compression.ZipFile]::Open($zipFile2Path, 'update')
 $zip.Entries.Name
@@ -67,6 +71,7 @@ $zip.Dispose()
 Get-ChildItem $extractPath | Remove-Item -Confirm:$false
 Remove-Item $zipFile1Path -Confirm:$false
 Remove-Item $zipFile2Path -Confirm:$false
+Clear-Host
 #endregion
 
 #region 5
