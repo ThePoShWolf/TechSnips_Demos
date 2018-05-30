@@ -8,7 +8,8 @@ Connect-ExchangeServer -auto -ClientApplication:ManagementShell
 #endregion
 
 #region clean
-
+Function Prompt(){}
+Clear-Host
 #endregion
 
 #region demo
