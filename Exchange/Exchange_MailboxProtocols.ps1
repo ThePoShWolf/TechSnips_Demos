@@ -13,4 +13,10 @@ Connect-ExchangeServer -auto -ClientApplication:ManagementShell
 
 #region demo
 
+#get
+
+#set
+
+#mass set
+
 #endregion

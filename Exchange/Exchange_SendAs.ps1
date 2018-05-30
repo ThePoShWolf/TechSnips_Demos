@@ -13,4 +13,10 @@ Connect-ExchangeServer -auto -ClientApplication:ManagementShell
 
 #region demo
 
+#get current send-as
+
+#set for user
+
+#set for distribution group
+
 #endregion

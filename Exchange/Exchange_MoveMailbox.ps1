@@ -13,4 +13,12 @@ Connect-ExchangeServer -auto -ClientApplication:ManagementShell
 
 #region demo
 
+#get current db
+
+#move
+
+#check status
+
+#get new db
+
 #endregion

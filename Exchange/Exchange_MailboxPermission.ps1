@@ -13,4 +13,10 @@ Connect-ExchangeServer -auto -ClientApplication:ManagementShell
 
 #region demo
 
+#get current
+
+#add full access, read only
+
+#remove access
+
 #endregion

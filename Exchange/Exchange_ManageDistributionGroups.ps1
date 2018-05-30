@@ -13,4 +13,12 @@ Connect-ExchangeServer -auto -ClientApplication:ManagementShell
 
 #region demo
 
+#create
+
+#add to
+
+#remove from
+
+#remove
+
 #endregion
