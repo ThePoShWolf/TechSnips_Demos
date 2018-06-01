@@ -15,6 +15,7 @@ New-Mailbox "D'Anna Biers" -UserPrincipalName number3@techsnipsdemo.org -Passwor
 New-Mailbox 'Simon' -UserPrincipalName number4@techsnipsdemo.org -Password (ConvertTo-SecureString 'Password1!' -AsPlainText -Force)
 New-Mailbox 'Aaron Doral' -UserPrincipalName number5@techsnipsdemo.org -Password (ConvertTo-SecureString 'Password1!' -AsPlainText -Force)
 New-Mailbox 'Number Six' -UserPrincipalName number6@techsnipsdemo.org -Password (ConvertTo-SecureString 'Password1!' -AsPlainText -Force)
+New-Mailbox 'Number Seven' -UserPrincipalName number7@techsnipsdemo.org -Password (ConvertTo-SecureString 'Password1!' -AsPlainText -Force)
 New-Mailbox 'Boomer' -UserPrincipalName number8@techsnipsdemo.org -Password (ConvertTo-SecureString 'Password1!' -AsPlainText -Force)
 New-Mailbox 'Samuel Anders' -UserPrincipalName number9@techsnipsdemo.org -Password (ConvertTo-SecureString 'Password1!' -AsPlainText -Force)
 New-Mailbox 'Saul Tigh' -UserPrincipalName number10@techsnipsdemo.org -Password (ConvertTo-SecureString 'Password1!' -AsPlainText -Force)
@@ -26,12 +27,14 @@ New-Mailbox 'William Adama' -UserPrincipalName williamadama@techsnipsdemo.org -P
 
 #region clean
 Set-Mailbox president -GrantSendOnBehalfTo richardadar
-Set-DistributionGroup cylons -GrantSendOnBehalfTo number1,number2,number3,number4,number5,number6
+Set-DistributionGroup cylons -GrantSendOnBehalfTo number1,number2,number3,number4,number5,number6,number7
 Function Prompt(){}
 Clear-Host
 #endregion
 
 #region demo
+
+Get-PSSession
 
 #region mailbox
 
@@ -44,6 +47,15 @@ Get-Mailbox -Identity President | Select-Object -Property GrantSendOnBehalfTo
 #Grant send-as for the mailbox
 Set-Mailbox -Identity President -GrantSendOnBehalfTo 'Laura Roslin'
 
+#Verify the send-as permissions
+Get-Mailbox -Identity President | Select-Object -Property GrantSendOnBehalfTo
+
+#If we wanted multiple users
+Set-Mailbox -Identity President -GrantSendOnBehalfTo 'Richard Adar','Laura Roslin'
+
+#Verify the send-as permissions
+Get-Mailbox -Identity President | Select-Object -Property GrantSendOnBehalfTo
+
 #endregion
 
 #region distribution group
@@ -54,7 +66,18 @@ Get-DistributionGroup -Identity Cylons | Select-Object -Property GrantSendOnBeha
 #Nicely format said permissions
 (Get-DistributionGroup -Identity Cylons).GrantSendOnBehalfTo | Select-Object -Property Name
 
-#Set the send-as permission for a distribution group
+#Add to the send-as permission for a distribution group
 Set-DistributionGroup -Identity Cylons -GrantSendOnBehalfTo @{Add='Boomer'}
+
+#Verify using nicely formatted output
+(Get-DistributionGroup -Identity Cylons).GrantSendOnBehalfTo | Select-Object -Property Name
+
+#How to remove just one entry
+Set-DistributionGroup -Identity Cylons -GrantSendOnBehalfTo @{Remove='Number Seven'}
+
+#Verify using nicely formatted output
+(Get-DistributionGroup -Identity Cylons).GrantSendOnBehalfTo | Select-Object -Property Name
+
+#endregion
 
 #endregion
