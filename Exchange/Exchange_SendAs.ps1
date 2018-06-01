@@ -14,7 +14,11 @@ Clear-Host
 
 #region demo
 
-#get current send-as
+#Get the current send-as permission for a user
+Get-ADPermission -Identity Sales | Where-Object {$_.IsInherited -eq $false -and $_.ExtendedRights -like "*Send-As*"} | Format-Table User,ExtendedRights
+
+#Get the current send-as permission for a distribution group
+Get-DistributionGroup -Identity Test2 | Select-Object GrantSendOnBehalfTo
 
 #set for user
 
