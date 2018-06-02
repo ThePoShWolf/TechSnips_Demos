@@ -15,6 +15,7 @@ If((Get-Mailbox -Identity 'Anthony Howell').Database -eq 'TechSnipsDemoDB'){
         Start-Sleep -Seconds 2
     }
 }
+Remove-MoveRequest -Identity 'Anthony Howell' -Confirm:$false
 Function Prompt(){}
 Clear-Host
 #endregion
@@ -22,6 +23,8 @@ Clear-Host
 #region demo
 
 Get-PSSession
+
+#region move a mailbox
 
 #Get the current DB of the mailbox
 Get-Mailbox -Identity 'Anthony Howell' | Select-Object -Property Database
@@ -37,5 +40,7 @@ Remove-MoveRequest -Identity 'Anthony Howell' -Confirm:$false
 
 #Verify the new DB
 Get-Mailbox -Identity 'Anthony Howell' | Select-Object -Property Database
+
+#endregion
 
 #endregion
