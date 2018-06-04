@@ -73,6 +73,8 @@ Get-TransportRule $TransportRule.Name | Select-Object -Property Description | Fo
 
 #https://docs.microsoft.com/en-us/powershell/module/exchange/policy-and-compliance/set-transportrule?view=exchange-ps
 
+#region Priority
+
 #Set Priority
 Get-TransportRule
 
@@ -81,8 +83,14 @@ Set-TransportRule -Identity 'Disclaimer' -Priority 0
 
 Get-TransportRule
 
+#endregion
+
+#region Modifying
+
 #Set tag external to except the IT Department
 Set-TransportRule -Identity 'Tag External' -ExceptIfSentToMemberOf 'IT Department'
+
+Get-TransportRule -Identity 'Tag External' | Select-Object -Property Description | Format-List
 
 #Disable/Enable
 Disable-TransportRule -Identity 'CC Accounting on Invoices and POs' -Confirm:$false
@@ -91,10 +99,14 @@ Get-TransportRule
 
 Enable-TransportRule -Identity 'CC Accounting on Invoices and POs'
 
-#remove
+#endregion
+
+#region Remove a transport rule
 Remove-TransportRule -Identity 'Disclaimer' -Confirm:$false
 
 Get-TransportRule
+
+#endregion
 
 #endregion
 
