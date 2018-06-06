@@ -59,9 +59,9 @@ Get-Mailbox -Identity 'BenderRodriguez' | Format-List EmailAddresses
 $Bender = @{
     'Identity' = 'BenderRodriguez'
     'EmailAddressPolicyEnabled' = $false
-    'EmailAddresses' = 'Bender@ProjectScissorsDemo.org'
+    'EmailAddresses' = 'BenderR@ProjectScissorsDemo.org'
 }
-Set-Mailbox -Identity 'BenderRodriguez' -EmailAddressPolicyEnabled $false -EmailAddresses 'BenderR@ProjectScissorsDemo.org'
+Set-Mailbox @Bender
 
 #Check the new address
 Get-Mailbox -Identity 'BenderRodriguez' | Format-List EmailAddresses
