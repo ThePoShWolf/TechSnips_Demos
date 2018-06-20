@@ -19,7 +19,6 @@ If(Test-Path $path){
 #region Prereqs
 
 [reflection.assembly]::loadwithpartialname("System.Windows.Forms") | Out-Null
-#[reflection.assembly]::loadwithpartialname("System.Drawing") | Out-Null
 
 #endregion
 
@@ -31,7 +30,7 @@ $basicForm.ShowDialog()
 #endregion
 
 #region insert text box
-
+[reflection.assembly]::loadwithpartialname("System.Windows.Forms") | Out-Null
 $folderForm = New-Object System.Windows.Forms.Form
 $pathTextBox = New-Object System.Windows.Forms.TextBox
 
@@ -42,11 +41,12 @@ $folderForm.Controls.Add($pathTextBox)
 
 $folderForm.ShowDialog()
 
-#end region
+#endregion
 
 #region insert button
 
 #region reused code
+[reflection.assembly]::loadwithpartialname("System.Windows.Forms") | Out-Null
 $folderForm = New-Object System.Windows.Forms.Form
 $pathTextBox = New-Object System.Windows.Forms.TextBox
 $pathTextBox.Location = '23,23'
@@ -68,6 +68,7 @@ $folderForm.ShowDialog()
 #region add action
 
 #region reused code
+[reflection.assembly]::loadwithpartialname("System.Windows.Forms") | Out-Null
 $folderForm = New-Object System.Windows.Forms.Form
 $pathTextBox = New-Object System.Windows.Forms.TextBox
 $selectButton = New-Object System.Windows.Forms.Button
@@ -95,6 +96,7 @@ $folderForm.ShowDialog()
 #region add script button
 
 #region reused code
+[reflection.assembly]::loadwithpartialname("System.Windows.Forms") | Out-Null
 $folderForm = New-Object System.Windows.Forms.Form
 $pathTextBox = New-Object System.Windows.Forms.TextBox
 $selectButton = New-Object System.Windows.Forms.Button
@@ -132,6 +134,7 @@ $folderForm.ShowDialog()
 #region Final touches
 
 #region reused code
+[reflection.assembly]::loadwithpartialname("System.Windows.Forms") | Out-Null
 $folderForm = New-Object System.Windows.Forms.Form
 $pathTextBox = New-Object System.Windows.Forms.TextBox
 $selectButton = New-Object System.Windows.Forms.Button
@@ -180,8 +183,7 @@ $folderForm.ShowDialog()
 #endregion
 
 #region whole script
-
-#region reused code
+[reflection.assembly]::loadwithpartialname("System.Windows.Forms") | Out-Null
 $folderForm = New-Object System.Windows.Forms.Form
 $pathTextBox = New-Object System.Windows.Forms.TextBox
 $selectButton = New-Object System.Windows.Forms.Button
