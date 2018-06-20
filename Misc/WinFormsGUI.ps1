@@ -3,6 +3,8 @@ Throw "This is a demo, dummy!"
 #endregion
 
 #region clean
+New-Item C:\RemoveMe -ItemType Directory
+New-Item C:\users\Anthony\Desktop\RemoveMe -ItemType Directory
 Function Prompt(){}
 Clear-Host
 #endregion
@@ -10,9 +12,12 @@ Clear-Host
 #region script demo
 
 $path = Read-Host 'Enter the new directory name '
+Test-Path $path
 If(Test-Path $path){
     Remove-Item $path
 }
+
+Test-Path $path
 
 #endregion
 
