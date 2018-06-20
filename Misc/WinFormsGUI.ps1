@@ -187,6 +187,8 @@ $folderForm.CancelButton = $cancelButton
 $folderForm.Controls.Add($okButton)
 $folderForm.controls.Add($cancelButton)
 
+$folderForm.Text = 'Folder Form'
+
 $folderForm.ShowDialog()
 
 #endregion
@@ -230,6 +232,7 @@ $cancelButton.Location = "153,215"
 
 $folderForm.AcceptButton = $okButton
 $folderForm.CancelButton = $cancelButton
+$folderForm.Text = 'Folder Form'
 
 $folderForm.Controls.Add($pathTextBox)
 $folderForm.Controls.Add($selectButton)
