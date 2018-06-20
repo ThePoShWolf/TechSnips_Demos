@@ -23,7 +23,7 @@ Test-Path $path
 
 #region Prereqs
 
-[reflection.assembly]::loadwithpartialname("System.Windows.Forms") | Out-Null
+[reflection.assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
 
 #endregion
 
