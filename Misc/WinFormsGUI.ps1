@@ -35,7 +35,11 @@ $basicForm.ShowDialog()
 #endregion
 
 #region insert text box
+
+#region reused code
 [reflection.assembly]::loadwithpartialname("System.Windows.Forms") | Out-Null
+#endregion
+
 $folderForm = New-Object System.Windows.Forms.Form
 $pathTextBox = New-Object System.Windows.Forms.TextBox
 
@@ -87,12 +91,12 @@ $folderForm.Controls.Add($selectButton)
 
 $folderBrowser = New-Object System.Windows.Forms.FolderBrowserDialog
 
-$pathTextBox.ReadOnly = $true
-
 $selectButton.Add_Click({
     $folderBrowser.ShowDialog()
     $pathTextBox.Text = $folderBrowser.SelectedPath
 })
+
+$pathTextBox.ReadOnly = $true
 
 $folderForm.ShowDialog()
 
