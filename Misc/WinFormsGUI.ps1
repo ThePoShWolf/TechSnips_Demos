@@ -16,7 +16,6 @@ Test-Path $path
 If(Test-Path $path){
     Remove-Item $path
 }
-
 Test-Path $path
 
 #endregion
