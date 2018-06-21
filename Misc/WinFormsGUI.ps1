@@ -4,7 +4,7 @@ Throw "This is a demo, dummy!"
 
 #region clean
 New-Item C:\RemoveMe -ItemType Directory
-New-Item C:\users\Anthony\Desktop\RemoveMe -ItemType Directory
+New-Item C:\users\Administrator\Desktop\RemoveMe -ItemType Directory
 Function Prompt(){}
 Clear-Host
 #endregion
