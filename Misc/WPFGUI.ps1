@@ -16,7 +16,6 @@ Test-Path $path
 If(Test-Path $path){
     Remove-Item $path
 }
-
 Test-Path $path
 
 #endregion
@@ -27,7 +26,7 @@ Add-Type -AssemblyName PresentationFramework
 
 #endregion
 
-#region basic form
+#region basic window
 [xml]$xaml = @"
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -203,12 +202,13 @@ $window.ShowDialog()
 
 #endregion
 
+#region final touches
 [xml]$xaml = @"
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Name="Window"
-    Title="Folder Form"
+    Title="Folder Window"
     SizeToContent="WidthAndHeight" >
 
     <Grid x:Name="Grid">
