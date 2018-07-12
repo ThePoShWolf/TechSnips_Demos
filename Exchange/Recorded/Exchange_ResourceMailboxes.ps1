@@ -59,9 +59,6 @@ $EquipmentCalendarProcessing = @{
     'AutomateProcessing' = 'None'
     'ForwardRequestsToDelegates' = $true
     'ResourceDelegates' = 'Hubert Farnsworth'
-    'BookingWindowInDays' = 30
-    'MaximumDurationInMinutes' = 15
-    'AllowRecurringMeetings' = $false
 }
 Set-CalendarProcessing @EquipmentCalendarProcessing
 
