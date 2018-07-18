@@ -54,6 +54,17 @@ Remove-DnsServerZone
 #region Adding a resource record
 Add-DnsServerResourceRecord
 
+#A record
+Add-DnsServerResourceRecord -ZoneName "techsnipsdemo.org" -A -Name "ntp01" -IPv4Address "10.0.2.200"
+
+#CNAME
+Add-DnsServerResourceRecord -CName -Name "server" -HostNameAlias "dc01.techsnipsdemo.org" -ZoneName "techsnipsdemo.org" -AllowUpdateAny  -TimeToLive 01:00:00
+
+#MX
+Add-DnsServerResourceRecord -Name "." -MX -ZoneName "techsnipsdemo.org" -MailExchange "ex01.techsnipsdemo.org" -Preference 10
+
+#SRV
+Add-DnsServerResourceRecord -Srv -Name "@" -ZoneName "techsnipsdemo.org" -DomainName "_sip._tcp.sipdir.online.lync.com" -Priority 100 -Weight 10 -Port 443 -TimeToLive 01:00:00
 #endregion
 
 #region Editting a resource record
