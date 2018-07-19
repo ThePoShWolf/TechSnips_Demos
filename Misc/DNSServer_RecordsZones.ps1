@@ -10,8 +10,8 @@ Invoke-Command -ComputerName DNS01 -ScriptBlock {
     Remove-DnsServerZone 'northamerica.techsnipsdemo.org' -force
     Remove-DnsServerZone '2.0.10.in-addr.arpa' -force
 }
-Remove-DnsServerResourceRecord -Name 'ntp01' -RRType A -ZoneName 'techsnipsdemo.org' -Force
-Remove-DnsServerResourceRecord -Name 'server' -RRType CName -ZoneName 'techsnipsdemo.org' -Force
+Remove-DnsServerResourceRecord -Name 'wug01' -RRType A -ZoneName 'techsnipsdemo.org' -Force
+Remove-DnsServerResourceRecord -Name 'MOVEit' -RRType CName -ZoneName 'techsnipsdemo.org' -Force
 Remove-DnsServerResourceRecord -Name '@' -RRType Mx -ZoneName 'techsnipsdemo.org' -Force
 Remove-DnsServerResourceRecord -Name '_sip._tcp' -RRType SRV -ZoneName 'techsnipsdemo.org' -Force
 Function Prompt(){}
@@ -89,12 +89,12 @@ Get-DnsServerZone
 #region Adding a resource record
 
 #A record
-Add-DnsServerResourceRecord -A -Name "ntp01" -ZoneName "techsnipsdemo.org" -IPv4Address "10.0.2.200"
+Add-DnsServerResourceRecord -A -Name 'wug01' -ZoneName 'techsnipsdemo.org' -IPv4Address '10.0.2.200'
 
 #CNAME
 $CNAMERecord = @{
     CName = $True
-    Name = 'server'
+    Name = 'MOVEit'
     HostNameAlias = 'dc01.techsnipsdemo.org'
     ZoneName = 'techsnipsdemo.org'
     TimeToLive =  '01:00:00'
@@ -106,7 +106,7 @@ $MXRecord = @{
     MX = $True
     Name = '.'
     ZoneName = "techsnipsdemo.org"
-    MailExchange = "ex01.techsnipsdemo.org"
+    MailExchange = "imail01.techsnipsdemo.org"
     Preference = 10
 }
 Add-DnsServerResourceRecord @MXRecord
@@ -138,11 +138,11 @@ $new.TimeToLive = [timespan]'01:00:00'
 Set-DnsServerResourceRecord -NewInputObject $new -OldInputObject $old -ZoneName 'techsnipsdemo.org' -PassThru
 
 #changing the IP
-$old = Get-DnsServerResourceRecord -ZoneName 'techsnipsdemo.org' -Name 'ntp01' -RRType 'A'
+$old = Get-DnsServerResourceRecord -ZoneName 'techsnipsdemo.org' -Name 'wug01' -RRType 'A'
 $new = $old.Clone()
 $new.RecordData.IPv4Address = [ipaddress]'10.2.2.220'
 
-Set-DnsServerResourceRecord -NewInputObject $new -OldInputObject $old -ZoneName 'techsnipsdemo.org'
+Set-DnsServerResourceRecord -NewInputObject $new -OldInputObject $old -ZoneName 'techsnipsdemo.org' -PassThru
 
 #Verify
 Get-DnsServerResourceRecord -ZoneName 'techsnipsdemo.org'
@@ -150,7 +150,7 @@ Get-DnsServerResourceRecord -ZoneName 'techsnipsdemo.org'
 #endregion
 
 #region Removing a resource record
-Remove-DnsServerResourceRecord -Name 'server' -RRType CNAME -ZoneName 'techsnipsdemo.org' -Force
+Remove-DnsServerResourceRecord -Name 'MOVEit' -RRType CNAME -ZoneName 'techsnipsdemo.org' -Force
 
 #Verify
 Get-DnsServerResourceRecord -ZoneName 'techsnipsdemo.org'
