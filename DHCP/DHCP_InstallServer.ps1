@@ -60,3 +60,12 @@ Add-DhcpServerInDC -DnsName $LocalFQDN -IPAddress $LocalIP
 Get-DhcpServerInDC
 
 #endregion
+
+#region Final step
+$DHCPRegistry = @{
+    Path = 'registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ServerManager\Roles\12'
+    Name = 'ConfigurationState'
+    Value = 2
+}
+Set-ItemProperty @DHCPRegistry
+#endregion
