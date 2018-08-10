@@ -92,18 +92,18 @@ Function Get-GPImpact
             $ous += (Get-ADDomain).DistinguishedName
         }
         If($ous){
-            If($scope.Trustee.Name -contains "Authenticated Users"){
-                Write-Verbose "Authenticated Users"
-                ForEach($ou in $ous){
-                    Write-Verbose $ou.distinguishedname
-                    Get-ADObject -SearchBase $ou.distinguishedname -Filter * | Where-Object {@("user","computer") -contains $_.objectclass} | Select Name,ObjectClass
-                }
-            }ElseIf($scope.Trustee){
-                If($Scope.Trustee.Name -contains "Authenticated Users"){
-                    ForEach($OU in $OUs){
-                        Get-ADObject -SearchBase $ou.distinguishedname -Filter * | Where-Object {@("user","computer") -contains $_.objectclass} | Select-Object Name,ObjectClass
+            ForEach($OU in $OUs){
+                Write-Verbose "OU: $(OU.Name)"
+            }
+            If($scope.Trustee){
+                If($scope.Trustee.Name -contains "Authenticated Users"){
+                    Write-Verbose "Authenticated Users"
+                    ForEach($ou in $ous){
+                        Write-Verbose $ou.distinguishedname
+                        Get-ADObject -SearchBase $ou.distinguishedname -Filter * | Where-Object {@("user","computer") -contains $_.objectclass} | Select Name,ObjectClass
                     }
-                }ElseIf($Scope.Trustee){
+                }Else{
+                    Write-Verbose "Groups"
                     $groupMembers = @()
                     #Get group members within scope
                     ForEach($Group in ($scope | Where-Object {$_.Trustee.SidType -eq "Group"})){
@@ -111,16 +111,21 @@ Function Get-GPImpact
                     }
                     $groupMembers = $groupMembers | Select-Object -Unique
                     #Find members the GPO applies to
-                    Foreach($OU in $OUs){
-                        Get-ADObject -SearchBase $ou.DistinguishedName -Filter * | Where-Object {@("user","computer") -contains $_.objectclass} | Where-Object {$groupMembers.Name -contains $_.name} | Select-Object Name,ObjectClass
+                    If($groupMembers){
+                        Write-Verbose "GroupMember count: $($groupMembers.count)"
+                        Foreach($OU in $OUs){
+                            Get-ADObject -SearchBase $ou.DistinguishedName -Filter * | Where-Object {@("user","computer") -contains $_.objectclass} | Where-Object {$groupMembers.Name -contains $_.name} | Select-Object Name,ObjectClass
+                        }
                     }
                     #Find all users and computers explicitly within scope
-                    ForEach($object in ($scope | Where-Object {@("user","computer") -contains $_.TrusteeType})){
-                        Switch($object.TrusteeType){
-                            "User" {$object = Get-ADUser $object.Trustee}
-                            "Computer" {$object = Get-ADComputer $object.Trustee}
+                    Write-Verbose "Users"
+                    ForEach($object in ($scope | Where-Object {@("user","computer") -contains $_.Trustee.SidType})){
+                        Write-Verbose $Object.Trustee.Name
+                        Switch($object.Trustee.SidType){
+                            "User" {$object = Get-ADUser $object.Trustee.Name}
+                            "Computer" {$object = Get-ADComputer $object.Trustee.Name}
                         }
-                        If($OUs -contains ($object.distinguishedname -creplace "^[^,]*,","")){
+                        If($OUs.DistinguishedName -contains ($object.distinguishedname -creplace "^[^,]*,","")){
                             Get-ADObject $object.distinguishedname
                         }
                     }
