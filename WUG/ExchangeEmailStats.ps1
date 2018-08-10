@@ -8,7 +8,7 @@ Import-PSSession $s -commandname Get-MessageTrackingLog | Out-Null
 $start = (Get-date).addminutes(-$PollMinutes)
 $end = (Get-Date)
 $TotalRec = Get-MessageTrackingLog -ResultSize Unlimited -Start $start -End $end -eventID "RECEIVE"
-$TotalRec.count
+$Context.SetValue($TotalRec.count)
 #endregion
 
 #region Messages Sent
@@ -21,5 +21,5 @@ Import-PSSession $s -commandname Get-MessageTrackingLog | Out-Null
 $start = (Get-date).addminutes(-$PollMinutes)
 $end = (Get-Date)
 $TotalSent = Get-MessageTrackingLog -ResultSize Unlimited -Start $start -End $end -eventID "SEND"
-$TotalSent.count
+$Context.SetValue($TotalSent.count)
 #endregion
