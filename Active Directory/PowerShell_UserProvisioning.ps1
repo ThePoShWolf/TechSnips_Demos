@@ -109,7 +109,7 @@ $letterCount = 1
 While($exists){
     Try{
         $newusername = $($fname.substring(0,$letterCount)) + $lname
-        $user = Get-ADUser $username
+        $user = Get-ADUser $newusername
         Write-Host "Username: $newusername already exists, trying another..."
         $letterCount++
     }Catch{
@@ -139,6 +139,7 @@ While(!$templateUser){
 	}
 }
 
+Get-ADUser -Identity $username -Properties MemberOf | Format-List Name,Memberof
 #endregion
 
 #region Putting the user in the correct OU
