@@ -8,8 +8,9 @@ Clear-Host
 #endregion
 
 #region Sort OUs by whether or not they have child items
+
 $emptyOUs = $nonEmptyOUs = @()
-ForEach($OU in Get-ADOrganizationalUnit -Filter *){
+ForEach($OU in Get-ADOrganizationalUnit -Filter {LinkedGroupPolicyObjects -like "*"}){
     $objects = $null
     $objects = Get-ADObject -filter * -SearchBase $OU | Where-Object ObjectClass -ne "organizationalunit"
     If($objects){
@@ -67,7 +68,7 @@ Function Get-GPOsLinkedToEmptyOUs{
     [cmdletbinding()]
     Param()
     $emptyOUs = $nonEmptyOUs = @()
-    ForEach($OU in Get-ADOrganizationalUnit -Filter *){
+    ForEach($OU in Get-ADOrganizationalUnit -Filter {LinkedGroupPolicyObjects -like "*"){
         $objects = $null
         $objects = Get-ADObject -filter * -SearchBase $OU | Where-Object ObjectClass -ne "organizationalunit"
         If($objects){
