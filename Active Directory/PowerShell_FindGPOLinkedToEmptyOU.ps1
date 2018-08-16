@@ -12,7 +12,7 @@ Clear-Host
 $emptyOUs = $nonEmptyOUs = @()
 ForEach($OU in Get-ADOrganizationalUnit -Filter {LinkedGroupPolicyObjects -like "*"}){
     $objects = $null
-    $objects = Get-ADObject -filter * -SearchBase $OU | Where-Object ObjectClass -ne "organizationalunit"
+    $objects = Get-ADObject -Filter {ObjectClass -ne 'OrganizationalUnit'} -SearchBase $OU
     If($objects){
         Write-Host "OU: '$($OU.Name)' is not empty"
         $nonEmptyOUs += $OU
@@ -68,9 +68,9 @@ Function Get-GPOsLinkedToEmptyOUs{
     [cmdletbinding()]
     Param()
     $emptyOUs = $nonEmptyOUs = @()
-    ForEach($OU in Get-ADOrganizationalUnit -Filter {LinkedGroupPolicyObjects -like "*"){
+    ForEach($OU in Get-ADOrganizationalUnit -Filter {LinkedGroupPolicyObjects -like "*"}){
         $objects = $null
-        $objects = Get-ADObject -filter * -SearchBase $OU | Where-Object ObjectClass -ne "organizationalunit"
+        $objects = Get-ADObject -Filter {ObjectClass -ne 'OrganizationalUnit'} -SearchBase $OU
         If($objects){
             Write-Verbose "OU: '$($OU.Name)' is not empty"
             $nonEmptyOUs += $OU
