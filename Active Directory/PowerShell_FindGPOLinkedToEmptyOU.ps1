@@ -9,6 +9,12 @@ Clear-Host
 
 #region Sort OUs by whether or not they have child items
 
+#Get all OUs with GPO links:
+Get-ADOrganizationalUnit -Filter {LinkedGroupPolicyObjects -like "*"}
+
+#Get all non-OU objects in each OU
+Get-ADObject -Filter {ObjectClass -ne 'OrganizationalUnit'} #-SearchBase $OU
+
 $emptyOUs = $nonEmptyOUs = @()
 ForEach($OU in Get-ADOrganizationalUnit -Filter {LinkedGroupPolicyObjects -like "*"}){
     $objects = $null
@@ -25,16 +31,31 @@ ForEach($OU in Get-ADOrganizationalUnit -Filter {LinkedGroupPolicyObjects -like 
 
 #region Find GPOs linked to those OUs
 
+#Info so far
+$emptyOUs
+$nonEmptyOUs
+
+#Linked GPO Guids
+$emptyOUs[0].LinkedGroupPolicyObjects
+
+#GPO from Guid
+Get-GPO -Guid $emptyOUs[0].LinkedGroupPolicyObjects.Substring(4,36)
+
+#Object to build output
 $GPOsLinkedToEmptyOUs = @()
-ForEach($OU in $emptyOUs | Where-Object LinkedGroupPolicyObjects){
+
+ForEach($OU in $emptyOUs){
     ForEach($GPOGuid in $OU.LinkedGroupPolicyObjects){
         $GPO = Get-GPO -Guid $GPOGuid.Substring(4,36)
-        Write-Host "GPO: '$($GPO.DisplayName)' is linked to empty OU: $($OU.Name)"
-        If($GPOsLinkedToEmptyOUs.GPO.Id -contains $GPO.Id){
-            $GPOsLinkedToEmptyOUs | Where-Object {$_.GPO.Id -eq $GPO.Id} | ForEach-Object {$_.EmptyOU = [string[]]$_.EmptyOU + "$($OU.DistinguishedName)"}
+        Write-Host "GPO: '$($GPO.GPOName)' is linked to empty OU: $($OU.Name)"
+        If($GPOsLinkedToEmptyOUs.GPOId -contains $GPO.Id){
+            ForEach($LinkedGPO in ($GPOsLinkedToEmptyOUs | Where-Object {$_.GPOId -eq $GPO.Id})){
+                $LinkedGPO.EmptyOU = [string[]]$LinkedGPO.EmptyOU + "$($OU.DistinguishedName)"
+            }
         }Else{
             $GPOsLinkedToEmptyOUs += [PSCustomObject]@{
-                GPO = $GPO
+                GPOName = $GPO.DisplayName
+                GPOId = $GPO.Id
                 EmptyOU = $OU.DistinguishedName
                 NonEmptyOU = ''
             }
@@ -45,20 +66,25 @@ ForEach($OU in $emptyOUs | Where-Object LinkedGroupPolicyObjects){
 
 #region Check if those GPOs are linked anywhere else
 
+#Info so far
+$GPOsLinkedToEmptyOUs
+
+
 ForEach($OU in $nonEmptyOUs){
     ForEach($GPO in $GPOsLinkedToEmptyOUs){
-        If($OU.LinkedGroupPolicyObjects){
-            If($OU.LinkedGroupPolicyObjects.Substring(4,36) -contains $GPO.GPO.Id){
-                Write-Verbose "GPO: '$($GPO.GPO.DisplayName)' also linked to non-empty OU: $($OU.Name)"
-                If($GPO.NonEmptyOUs){
-                    $GPO.NonEmptyOU = [string[]]$GPO.NonEmptyOU + $OU.DistinguishedName
-                }Else{
-                    $GPO.NonEmptyOU = $OU.DistinguishedName
-                }
+        If($OU.LinkedGroupPolicyObjects.Substring(4,36) -contains $GPO.GPOId){
+            Write-Verbose "GPO: '$($GPO.GPOName)' also linked to non-empty OU: $($OU.Name)"
+            If($GPO.NonEmptyOUs){
+                $GPO.NonEmptyOU = [string[]]$GPO.NonEmptyOU + $OU.DistinguishedName
+            }Else{
+                $GPO.NonEmptyOU = $OU.DistinguishedName
             }
         }
     }
 }
+
+#Now
+$GPOsLinkedToEmptyOUs
 
 #endregion
 
@@ -80,15 +106,18 @@ Function Get-GPOsLinkedToEmptyOUs{
         }
     }
     $GPOsLinkedToEmptyOUs = @()
-    ForEach($OU in $emptyOUs | Where-Object LinkedGroupPolicyObjects){
+    ForEach($OU in $emptyOUs){
         ForEach($GPOGuid in $OU.LinkedGroupPolicyObjects){
             $GPO = Get-GPO -Guid $GPOGuid.Substring(4,36)
-            Write-Verbose "GPO: '$($GPO.DisplayName)' is linked to empty OU: $($OU.Name)"
-            If($GPOsLinkedToEmptyOUs.GPO.Id -contains $GPO.Id){
-                $GPOsLinkedToEmptyOUs | Where-Object {$_.GPO.Id -eq $GPO.Id} | ForEach-Object{$_.EmptyOU = [string[]]$_.EmptyOU + "$($OU.DistinguishedName)"}
+            Write-Verbose "GPO: '$($GPO.GPOName)' is linked to empty OU: $($OU.Name)"
+            If($GPOsLinkedToEmptyOUs.GPOId -contains $GPO.Id){
+                ForEach($LinkedGPO in ($GPOsLinkedToEmptyOUs | Where-Object {$_.GPOId -eq $GPO.Id})){
+                    $LinkedGPO.EmptyOU = [string[]]$LinkedGPO.EmptyOU + "$($OU.DistinguishedName)"
+                }
             }Else{
                 $GPOsLinkedToEmptyOUs += [PSCustomObject]@{
-                    GPO = $GPO
+                    GPOName = $GPO.DisplayName
+                    GPOId = $GPO.Id
                     EmptyOU = $OU.DistinguishedName
                     NonEmptyOU = ''
                 }
@@ -97,14 +126,12 @@ Function Get-GPOsLinkedToEmptyOUs{
     }
     ForEach($OU in $nonEmptyOUs){
         ForEach($GPO in $GPOsLinkedToEmptyOUs){
-            If($OU.LinkedGroupPolicyObjects){
-                If($OU.LinkedGroupPolicyObjects.Substring(4,36) -contains $GPO.GPO.Id){
-                    Write-Verbose "GPO: '$($GPO.GPO.DisplayName)' also linked to non-empty OU: $($OU.Name)"
-                    If($GPO.NonEmptyOUs){
-                        $GPO.NonEmptyOU = [string[]]$GPO.NonEmptyOU + $OU.DistinguishedName
-                    }Else{
-                        $GPO.NonEmptyOU = $OU.DistinguishedName
-                    }
+            If($OU.LinkedGroupPolicyObjects.Substring(4,36) -contains $GPO.GPOId){
+                Write-Verbose "GPO: '$($GPO.GPOName)' also linked to non-empty OU: $($OU.Name)"
+                If($GPO.NonEmptyOUs){
+                    $GPO.NonEmptyOU = [string[]]$GPO.NonEmptyOU + $OU.DistinguishedName
+                }Else{
+                    $GPO.NonEmptyOU = $OU.DistinguishedName
                 }
             }
         }
