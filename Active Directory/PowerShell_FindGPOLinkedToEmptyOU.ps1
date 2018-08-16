@@ -7,7 +7,7 @@ Function Prompt(){}
 Clear-Host
 #endregion
 
-#region Sort OUs by whether or not they have child items
+#region Sort OUs with GPO links by whether or not they have non-OU children
 
 #Get all OUs with GPO links:
 Get-ADOrganizationalUnit -Filter {LinkedGroupPolicyObjects -like "*"}
@@ -29,7 +29,7 @@ ForEach($OU in Get-ADOrganizationalUnit -Filter {LinkedGroupPolicyObjects -like 
 }
 #endregion
 
-#region Find GPOs linked to those OUs
+#region Find GPOs linked to those empty OUs
 
 #Info so far
 $emptyOUs
@@ -64,7 +64,7 @@ ForEach($OU in $emptyOUs){
 }
 #endregion
 
-#region Check if those GPOs are linked anywhere else
+#region Check if those GPOs are linked to any OUs with children
 
 #Info so far
 $GPOsLinkedToEmptyOUs
