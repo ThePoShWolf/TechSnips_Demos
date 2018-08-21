@@ -21,26 +21,90 @@ Get-GPRegistryValue -Name $GPOName -Key 'HKLM\Software\Policies\Microsoft\System
 
 #region Recursive function
 #https://github.com/gpoguy/ADMXToDSC/blob/master/ADMXToDSC.PS1
-Function Get-GPAllRegistryValues{
+#Lines 73-107, Recurse_PolicyKeys
+Function Get-GPRecursiveRegistryValues{
     [cmdletbinding()]
-    param(
-        [string]$key,
-        [string]$gpoName
+    Param(
+        [string]$GPOName,
+        [string]$Key
     )
-    $current = Get-GPRegistryValue -Name $gpo -Key $key -ErrorAction SilentlyContinue
-    If($current){
-        Foreach($item in $current){
-            If ($item.ValueName){
-                $item
-            }Else{
-                Get-GPAllRegistryValues -Key $item.FullKeyPath -gpoName $gpo
-            }
+    $current = Get-GPRegistryValue -Name $GPOName -Key $Key -ErrorAction SilentlyContinue
+    Foreach($item in $current){
+        If ($item.ValueName){
+            $item
+        }Else{
+            Get-GPRecursiveRegistryValues -Key $item.FullKeyPath -gpoName $GPOName
         }
     }
 }
+#Usage
+Get-GPRecursiveRegistryValues -GPOName 'Default Domain Policy' -Key 'HKLM\System'
+
+Get-GPRecursiveRegistryValues -GPOName 'Default Domain Policy' -Key 'HKCU\Software'
+
 #endregion
 
-$BaseKeys = 'HKCU\Software','HKLM\System','HKLM\Software'
-$GPOs = Get-GPO -All
+#region Make it one function!
 
-ForEach($GPO in $GPOs)
+#region what we need
+$BaseKeys = 'HKLM\System','HKLM\Software','HKCU\Software'
+$GPOName = 'IT'
+
+ForEach($Key in $BaseKeys){
+    Get-GPRecursiveRegistryValues -GPOName $GPOName -Key $Key
+}
+
+#endregion
+
+#region function
+
+Function Get-GPAllRegistryValues{
+    Param(
+        [Parameter(
+            ValueFromPipelineByPropertyName = $true
+        )]
+        [Alias('DisplayName')]
+        [string]$Name
+    )
+    Begin{
+        $BaseKeys = 'HKLM\System','HKLM\Software','HKCU\Software'
+        Function Get-GPRecursiveRegistryValues{
+            [cmdletbinding()]
+            Param(
+                [string]$GPOName,
+                [string]$Key
+            )
+            $current = Get-GPRegistryValue -Name $GPOName -Key $Key -ErrorAction SilentlyContinue
+            Foreach($item in $current){
+                If ($item.ValueName){
+                    $item
+                }Else{
+                    Get-GPRecursiveRegistryValues -Key $item.FullKeyPath -gpoName $GPOName
+                }
+            }
+        }
+
+    }
+    Process{
+        ForEach($Key in $BaseKeys){
+            Get-GPRecursiveRegistryValues -GPOName $Name -Key $Key
+        }
+    }
+    End{}
+}
+
+#Usage
+#One Policy
+Get-GPAllRegistryValues -Name 'IT'
+
+Get-GPO -Name 'IT' | Get-GPAllRegistryValues
+
+#Multiple
+Get-GPO -All | Where-Object DisplayName -like 'Default*' | Get-GPAllRegistryValues
+
+#All
+Get-GPO -All | Get-GPAllRegistryValues
+
+#endregion
+
+#endregion
