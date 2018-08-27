@@ -116,7 +116,7 @@ Get-ADUserActivityReport -ComputerName 'Prod-DC' | Format-Table
 Get-ADComputer -Filter * | Get-ADUserActivityReport | Format-Table
 
 $ExportPath = 'C:\Users\techsnips\Desktop\ADUserReport.csv'
-Get-ADComputer -Filter * | Get-ADUserActivityReport | Export-CSV $ExportPath -NoTypeInformation
+Get-ADComputer -Filter * | Get-ADUserActivityReport | Export-CSV $ExportPath -NoTypeInformation -Force
 
 . $ExportPath
 
