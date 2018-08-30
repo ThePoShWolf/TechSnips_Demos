@@ -40,10 +40,39 @@ Get-ADReplicationSite
 
 #endregion
 
-#region Remove-ADReplicationSite
+#region Set-ADReplicationSite
+
+#Match up the replication schedules
+Set-ADReplicationSite 'Moon' -ReplicationSchedule $schedule
+
+#Reset the schedule
+$schedule.ResetSchedule()
+$schedule.SetDailySchedule("TwentyOne","Zero","TwentyThree","FortyFive")
+Get-ADReplicationSite -Filter {Name -notlike '*default*'} | Set-ADReplicationSite -ReplicationSchedule $schedule
+
+#Other properties
+Get-ADReplicationSite -Filter * | Set-ADReplicationSite -ScheduleHashingEnabled $false
+
+Get-ADReplicationSite -Filter * -Properties ScheduleHashingEnabled | Format-Table Name,ScheduleHashingEnabled
+
+#Intersite topology generator
+Set-ADReplactionSite 'Mars' -InterSiteTopologyGenerator 'Prod-DC'
 
 #endregion
 
-#region Set-ADReplicationSite
+#region Remove-ADReplicationSite
+
+#Remove one site
+Remove-ADReplicationSite 'Moon'
+
+Get-ADReplicationSite 'Moon'
+
+#Remove sites using a filter
+$20mAgo = (Get-Date).AddMinutes(-20)
+Get-ADReplicationSite -Filter {Create -gt $20mAgo}
+
+Get-ADReplicationSite -Filter {Created -gt $20mAgo} | Remove-ADReplicationSite
+
+Get-ADReplicationSite -Filter {Create -gt $20mAgo}
 
 #endregion
