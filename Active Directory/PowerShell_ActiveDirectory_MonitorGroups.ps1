@@ -148,7 +148,7 @@ Function Compare-ADGroupMemberships {
                 ForEach($currentMember in $currentMemberships){
                     If($previousMemberships.Member -notcontains $currentMember.Member){
                         Write-Verbose "$($currentMember.Member) was added."
-                        $emailString += "$($currentMember.Member) was add to $group.`n"
+                        $emailString += "$($currentMember.Member) was added to $group.`n"
                     }
                 }
             }
