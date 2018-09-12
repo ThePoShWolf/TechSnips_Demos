@@ -51,11 +51,11 @@ $Top500Websites = Import-Csv 'D:\TechSnips\top500.domains.05.18.csv'
 #What the object looks like
 $Top500Websites[0]
 
-$Top500Websites | Select-Object -First 20 | ForEach-Object {
+$Top500Websites | Select-Object -First 25 | ForEach-Object {
     Test-Connection $_.url.replace('/','') -Count 1 -Quiet
 }
 
-$Top500Websites | Select-Object -First 20 | ForEach-Object {
+$Top500Websites | Select-Object -First 25 | ForEach-Object {
     Start-Job -Name $_.url.replace('/','') -ScriptBlock {
         Test-Connection $args[0].replace('/','') -Count 1 -Quiet
     } -ArgumentList $_.Url
@@ -71,7 +71,7 @@ Get-Job | Where-Object HasMoreData -eq $true | Receive-Job
 Get-Job | Remove-Job
 
 #Create usable return data
-$Top500Websites | Select-Object -First 20 | ForEach-Object {
+$Top500Websites | Select-Object -First 25 | ForEach-Object {
     Start-Job -Name $_.url.replace('/','') -ScriptBlock {
         [PSCustomObject]@{
             URL = $args[0]
@@ -86,6 +86,8 @@ Get-Job
 #Receive jobs
 $ReceivedJobs = @()
 $ReceivedJobs = Get-Job | Where-Object HasMoreData -eq $true | Receive-Job
+
+$ReceivedJobs.Count
 
 #If we missed any
 $ReceivedJobs += Get-Job | Where-Object HasMoreData -eq $true | Receive-Job
