@@ -92,4 +92,6 @@ $ReceivedJobs.Count
 #If we missed any
 $ReceivedJobs += Get-Job | Where-Object HasMoreData -eq $true | Receive-Job
 
+$ReceivedJobs | Format-Table url,ping
+
 #endregion
