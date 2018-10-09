@@ -7,35 +7,36 @@ Function Prompt(){}
 Clear-Host
 #endregion
 
-#region Creating
+#region Creating new users
 
-#region Basics
+#region A simple example of New-ADUser
 New-ADUser 'Anthony Howell'
 
 Get-ADUser 'Anthony Howell'
 #endregion
 
-#region Complex
-$NewExecutive = @{
-    'GivenName' = 'Franz'
-    'Surname' = 'Ferdinand'
-    'Name' = 'Franz Ferdinand'
-    'DisplayName' = 'Franz Ferdinand'
-    'SamAccountName' = 'Franz.Ferdinand'
-    'UserPrincipalName' = 'Franz.Ferdinand@techsnipsdemo.org'
-    'EmailAddress' = 'Franz.Ferdinand@techsnipsdemo.org'
-    'Title' = 'Archduke'
-    'Department' = 'Executives'
-    'Country' = 'AT'
+#region A more complex example of New-ADUser
+$NewEngineer = @{
+    'GivenName' = 'Douglas'
+    'Surname' = 'Engelbart'
+    'Name' = 'Douglas Engelbart'
+    'DisplayName' = 'Douglas Engelbart'
+    'SamAccountName' = 'Douglas.Engelbart'
+    'UserPrincipalName' = 'Douglas.Engelbart@techsnips.local'
+    'EmailAddress' = 'Douglas.Engelbart@techsnips.io'
+    'Title' = 'Engineer'
+    'Department' = 'Research and Development'
+    'Country' = 'US'
     'Manager' = 'Anthony Howell'
     'AccountPassword' = (ConvertTo-SecureString 'SecurePassword1!' -AsPlainText -Force)
 }
-New-ADUser @NewExecutive
+New-ADUser @NewEngineer
 
-$Properties = 'GivenName','SurName','Name','DisplayName','SamAccountName','UserPrincipalName','EmailAddress','Title','Department','Country','Manager'
+$Properties = 'GivenName','SurName','Name','DisplayName','SamAccountName', `
+'UserPrincipalName','EmailAddress','Title','Department','Country','Manager'
 
 # Using the -Properties parameter to specify which properties to return
-Get-ADUser -Identity Franz.Ferdinand -Properties $Properties | Select-Object $Properties
+Get-ADUser -Identity 'Douglas.Engelbart' -Properties $Properties | Select-Object $Properties
 #endregion
 
 #endregion
@@ -47,17 +48,14 @@ Get-ADUser -Filter * | Format-Table Name
 #endregion
 
 #region Filtering by a single attribute
-Get-ADUser -Filter {Department -eq "IT"} | Format-Table Name
+Get-ADUser -Filter {Department -eq "IT"} -Properties Department | Format-Table Name,Department
 
-Get-ADUser -Filter {Title -like "*Manager"} | Format-Table Name
+Get-ADUser -Filter {Title -like "*Manager"} -Properties Title | Format-Table Name,Title
 #endregion
 
 #region Filtering by multiple attributes
-Get-ADUser -Filter {(Department -eq "IT") -and (Manager -eq "Jen")} | Format-Table Name
-
-$before = (Get-Date).AddDays(-2)
-$after = (Get-Date).AddDays(-6)
-Get-ADUser -Filter {(Created -gt $after) -and (Created -lt $before)} | Format-Table Name
+$filter = {(Department -eq "IT") -and (Manager -eq "abertram")}
+Get-ADUser -Filter $filter -Properties Department,Manager | Format-Table Name,Department,Manager
 #endregion
 
 #region Retrieving users by OU
@@ -66,7 +64,12 @@ Get-ADUser -Filter * -SearchBase $OUPath | Format-Table Name
 #endregion
 
 #region Both a filter and OU
-Get-ADUSer -SearchBase $OUPath -Filter {(Enabled -eq $true) -and (PasswordExpired -eq $false)} | Format-Table Name
+$userSplat = @{
+    SearchBase = $OUPath
+    Filter = $filter
+    Properties = 'Department','Manager'
+}
+Get-ADUSer @userSplat | Format-Table Name,DistinguishedName,Department,Manager
 #endregion
 
 #endregion
@@ -74,26 +77,31 @@ Get-ADUSer -SearchBase $OUPath -Filter {(Enabled -eq $true) -and (PasswordExpire
 #region Setting
 
 #region Attributes with parameters
-Set-ADUser 'Anthony Howell' -Title 'Overlord' -Department 'Management'
+Get-ADUser 'Anthony Howell' -Properties Title,Department | Format-Table Name,Title,Department
+
+Set-ADUser 'Anthony Howell' -Title 'Overlord' -Department 'Upper Echelon'
+
+Get-ADUser 'Anthony Howell' -Properties Title,Department | Format-Table Name,Title,Department
 #endregion
 
 #region Attributes without parameters
+Get-ADUser 'Anthony Howell' -Properties IPPhone
+
 $user = Get-ADUser 'Anthony Howell' -Properties IPPhone
 $user.IPPhone = 7647
 Set-ADUser -Instance $user
-#endregion
-#region 
 
+Get-ADUser 'Anthony Howell' -Properties IPPhone
 #endregion
 
 #endregion
 
 #region Removing
 
-Get-ADUser -Identity 'GPOTest'
+Get-ADUser 'GPOTest'
 
-Remove-ADUser -Identity 'GPOTest' -Confirm:$false
+Remove-ADUser 'GPOTest' -Confirm:$false
 
-Get-ADUser -Identity 'GPOTest'
+Get-ADUser 'GPOTest'
 
 #endregion
