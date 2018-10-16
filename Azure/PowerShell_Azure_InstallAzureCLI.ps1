@@ -7,7 +7,7 @@ $DownloadFile = 'C:\Users\Anthony\Downloads\AzureCLI.msi'
 Invoke-WebRequest 'https://aka.ms/installazurecliwindows' -OutFile $DownloadFile
 
 # Run the installer
-msiexec /i $DownloadFile /qn /L*v log.txt
+Start-Process msiexec.exe -Wait -ArgumentList "/i $DownloadFile /qn /L*v log.txt"
 
-# Login 
-az login
+# Login
+Start-Process PowerShell.exe
