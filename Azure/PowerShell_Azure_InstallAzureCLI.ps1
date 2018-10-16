@@ -1,3 +1,5 @@
+# Docs: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-windows?view=azure-cli-latest
+
 # Set the download location
 $DownloadFile = 'C:\Users\Anthony\Downloads\AzureCLI.msi'
 
