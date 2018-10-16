@@ -13,7 +13,7 @@ $ContainerParams = @{
     Name = 'supertscontainer'
     Image = 'microsoft/iis:nanoserver'
     OsType = 'Windows'
-    DnsNameLabel = 'supertscontainer007'
+    DnsNameLabel = 'supertscontainer'
 }
 New-AzureRmContainerGroup @ContainerParams
 
