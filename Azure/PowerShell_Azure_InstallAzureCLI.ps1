@@ -8,3 +8,6 @@ Invoke-WebRequest 'https://aka.ms/installazurecliwindows' -OutFile $DownloadFile
 
 # Run the installer
 msiexec /i $DownloadFile /qn /L*v log.txt
+
+# Login 
+az login
