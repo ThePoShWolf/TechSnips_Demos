@@ -37,6 +37,13 @@ If($string -match '\d+'){
 }
 #endregion
 
+#region Problem with more than one
+$string = "I've work in IT for 3000 years."
+If($string -match '\d+'){
+    $Matches[0]
+}
+#endregion
+
 #region Considering acceptable range
 If($string -match '(1)?\d{2}'){
     $Matches[0]
