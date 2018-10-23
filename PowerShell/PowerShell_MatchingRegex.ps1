@@ -45,7 +45,7 @@ If($string -match '\d+'){
 #endregion
 
 #region Considering acceptable range
-If($string -match '(1)?\d{2}'){
+If($string -match '(1)?\d{1,2}'){
     $Matches[0]
 }
 #endregion
