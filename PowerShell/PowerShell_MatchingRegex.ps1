@@ -57,5 +57,9 @@ $string = "I've worked in IT for 201 years."
 If($string -match '[\D1]\d{2}\D'){
     $Matches[0]
 }
+
+# Trim!
+$Matches[0].Trim()
+
 #endregion
 #endregion
