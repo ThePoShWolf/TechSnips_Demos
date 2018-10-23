@@ -45,16 +45,17 @@ If($string -match '\d+'){
 #endregion
 
 #region Considering acceptable range
-If($string -match '(1)?\d{1,2}'){
+If($string -match ' (1)?\d{1,2} '){
     $Matches[0]
 }
 #endregion
 
 $string = "I've worked in IT for 130 years."
 $string = "I've worked in IT for 201 years."
+$string = "I've worked in IT for 2 years."
 
 #region Better matching
-If($string -match '[\D1]\d{2}\D'){
+If($string -match '(\D|1)\d{1,2}\D'){
     $Matches[0]
 }
 
