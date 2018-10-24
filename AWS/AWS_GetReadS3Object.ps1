@@ -1,4 +1,4 @@
-#region Finding files in AWS
+#region Finding files in AWS S3
 
 $BucketName = 'snip-videos'
 
