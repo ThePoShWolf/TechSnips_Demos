@@ -1,10 +1,12 @@
-Function prompt{}
-
 # Default
 # Find current code: (Get-Command Prompt).ScriptBlock
 Function prompt{
     "PS $($executionContext.SessionState.Path.CurrentLocation)$('>' * ($nestedPromptLevel + 1)) "
 }
+
+# Simplest
+Function prompt{}
+
 # Simple Examples
 Function prompt {
     (Get-Date).ToShortTimeString()
