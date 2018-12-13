@@ -7,6 +7,8 @@ $env:Path.Split(';')
 $env:Path += ';C:\tmp'
 
 # Demonstration
+Get-ChildItem 'C:\tmp'
+
 executeme.ps1
 
 New-Item C:\tmp\executeme.ps1 -Value "Write-Host 'Hello from executeme.ps1'"
