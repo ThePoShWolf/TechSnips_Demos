@@ -22,7 +22,7 @@ Function prompt{
 Function prompt {
     $prompt = 'pwsh '
     $prompt += "[$($PSVersionTable.PSVersion)] "
-    $prompt += "$(Get-Date -Format 'HH:MM:ss')"
+    $prompt += "$(Get-Date -Format 'HH:mm:ss')"
     If($IsWindows){
         If([bool](([System.Security.Principal.WindowsIdentity]::GetCurrent()).groups -match "S-1-5-32-544")){
             $prompt += '#'
@@ -47,7 +47,7 @@ Function prompt{
     $prompt += " | $loc"
     $items = Get-ChildItem (Get-Location)
     $prompt += " - $($items.count)"
-    $prompt += " | $(Get-Date -Format 'HH:MM:ss')"
+    $prompt += " | $(Get-Date -Format 'HH:mm:ss')"
     #$prompt += " | "
     $prompt += "`nPS"
     If($IsWindows){
