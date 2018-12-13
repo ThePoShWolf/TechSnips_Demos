@@ -1,5 +1,7 @@
 # Default
-# Find current code: (Get-Command Prompt).ScriptBlock
+# Find current code
+(Get-Command Prompt).ScriptBlock
+
 Function prompt{
     "PS $($executionContext.SessionState.Path.CurrentLocation)$('>' * ($nestedPromptLevel + 1)) "
 }
