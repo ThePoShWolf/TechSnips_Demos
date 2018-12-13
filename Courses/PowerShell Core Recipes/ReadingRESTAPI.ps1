@@ -39,7 +39,7 @@ $result.items | Format-Table Title,tags
 
 $result.items | Where-Object tags -Contains 'powershell'
 
-Start-Process ($result.items | Where-Object tags -Contains 'powershell')[0].link
+Start-Process ($result.items | Where-Object tags -Contains 'sql')[0].link
 
 #endregion
 #endregion
@@ -64,9 +64,15 @@ $result = Invoke-RestMethod -Method Get -Uri $url
 #region Looking at the results
 $result.quota_remaining
 
+$result.items.count
+
+$result.has_more
+
 $result.items | Format-Table Title
 
 Start-Process ($result.items | Where-Object tags -Contains 'powershell')[0].link
+
+Start-Process $result.items[0].link
 
 #endregion
 #endregion
