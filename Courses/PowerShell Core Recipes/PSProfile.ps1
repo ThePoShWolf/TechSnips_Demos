@@ -77,7 +77,7 @@ Function prompt {
     "$prompt> "
 }
 
-$env:Path += ':/usr/tmp'
+$env:PATH += ':/usr/tmp'
 $cityID = '5725846'
 $weatherAPIKey = Get-Content ~/.config/OpenWeatherAPI.txt
 $url = "https://api.openweathermap.org/data/2.5/weather?id=$cityID&APPID=$weatherAPIKey"
