@@ -1,5 +1,6 @@
 # Windows
 # Location: $profile
+
 #region Prep
 $profile
 $profile = 'C:\Users\Anthony\Documents\PowerShell\Microsoft.PowerShell_profile.ps1'
@@ -7,6 +8,8 @@ If(-not(Test-Path $profile)){
     New-Item $profile -ItemType File
 }
 #endregion
+
+#region Profile example
 Function prompt {
     $prompt = 'pwsh '
     $prompt += "[$($PSVersionTable.PSVersion)] "
@@ -36,9 +39,11 @@ Write-Host "The weather is currently: $($resp.weather.description)"
 Function Go-Home{
     Set-Location $env:USERPROFILE
 }
+#endregion
 
 # Linux and macOS
-# Location: ~/.config/powershell/profile.ps1
+# Location: ~/.config/powershell/profile.ps1\
+
 #region Prep
 $profilePath = '~/.config/powershell/profile.ps1'
 If(-not(Test-Path $profilePath)){
@@ -48,6 +53,8 @@ If(-not(Test-Path $profilePath)){
     New-Item $profilePath -ItemType File
 }
 #endregion
+
+#region Profile example
 Function prompt {
     $prompt = 'pwsh '
     $prompt += "[$($PSVersionTable.PSVersion)] "
@@ -78,3 +85,4 @@ Write-Host "The weather is currently: $($resp.weather.description)"
 Function Go-Home{
     Set-Location ~
 }
+#endregion
