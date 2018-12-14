@@ -10,6 +10,7 @@ If(-not(Test-Path $profile)){
 #endregion
 
 #region Profile example
+$WindowsProfile = @'
 Function prompt {
     $prompt = 'pwsh '
     $prompt += "[$($PSVersionTable.PSVersion)] "
@@ -39,6 +40,10 @@ Write-Host "The weather is currently: $($resp.weather.description)"
 Function Go-Home{
     Set-Location $env:USERPROFILE
 }
+'@
+Set-Content $profile $WindowsProfile
+
+Start-Process pwsh.exe
 #endregion
 
 # Linux and macOS
@@ -55,6 +60,7 @@ If(-not(Test-Path $profilePath)){
 #endregion
 
 #region Profile example
+$LinuxProfile = @'
 Function prompt {
     $prompt = 'pwsh '
     $prompt += "[$($PSVersionTable.PSVersion)] "
@@ -73,7 +79,7 @@ Function prompt {
 
 $env:Path += ':/usr/tmp'
 $cityID = '5725846'
-$weatherAPIKey = Get-Content ~/Documents/OpenWeatherAPI.txt
+$weatherAPIKey = Get-Content ~/.config/OpenWeatherAPI.txt
 $url = "https://api.openweathermap.org/data/2.5/weather?id=$cityID&APPID=$weatherAPIKey"
 $resp = Invoke-RestMethod -Uri $url -Method Get
 
@@ -85,4 +91,6 @@ Write-Host "The weather is currently: $($resp.weather.description)"
 Function Go-Home{
     Set-Location ~
 }
+'@
+Set-Content $profilePath -Value $LinuxProfile
 #endregion
