@@ -10,12 +10,10 @@ $content = $page.Content -Split "`n"
 
 # Get the index of the 'Background' header
 $page.Content -match '\<h2\>.*Design.*\<\/h2\>'
-$page.Content -match '\<h2\>.*Comparison.*\<\/h2\>'
 $a = $content.IndexOf($Matches[0])
 
 # Get the index of the 'Design' header
 $page.Content -match '\<h2\>.*Desired State Configuration.*\<\/h2\>'
-$page.Content -match '\<h2\>.*File Extens.*\<\/h2\>'
 $b = $content.IndexOf($Matches[0])
 
 # Find any included images
@@ -48,7 +46,7 @@ For($x=0;$x -lt $text.Count; $x++){
                 }
                 While($text[$x+1] -notmatch '\<\/tr'){
                     $x++
-                    If($text[$x] -match '\<th|\<td'){
+                    If($text[$x] -match '\<th|\<td'){ # Match a table header <th> or table cell <td>
                         $text[$x] -match '\>(?<contents>[^<>]+)' | Out-Null # Match the contents of the cell
                         $cellContents = ($matches['contents'] -replace '\<[^>]*\>','').Trim()
                         $cellContents = ($cellContents -replace '&#91;','[') -replace '&#93;',']' # Clean up []
@@ -94,10 +92,6 @@ code .\test.txt
 #endregion
 
 #region Automatically find the headers and get their text
-$url = 'https://en.wikipedia.org/wiki/PowerShell'
-$page = Invoke-WebRequest -Uri $url -UseBasicParsing
-$content = $page.Content -Split "`n"
-
 # Find all headers
 $headers = $content | ForEach-Object{If($_ -match '\<h2\>.*\>(?<header>[a-zA-Z0-9 ]+)\<.*\[.*\<\/h2\>'){$matches.header}}
 
