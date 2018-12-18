@@ -94,7 +94,7 @@ code .\test.txt
 #endregion
 
 #region Automatically find the headers and get their text
-$url = 'https://en.wikipedia.org/wiki/centos'
+$url = 'https://en.wikipedia.org/wiki/PowerShell'
 $page = Invoke-WebRequest -Uri $url -UseBasicParsing
 $content = $page.Content -Split "`n"
 
