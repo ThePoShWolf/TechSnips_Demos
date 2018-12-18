@@ -9,11 +9,11 @@ $page = Invoke-WebRequest -Uri $url -UseBasicParsing
 $content = $page.Content -Split "`n"
 
 # Get the index of the 'Background' header
-$page.Content -match '\<h2\>.*Design.*\<\/h2\>'
+$page.Content -match '\<h2\>.*Comparison.*\<\/h2\>'
 $a = $content.IndexOf($Matches[0])
 
 # Get the index of the 'Design' header
-$page.Content -match '\<h2\>.*Desired State Configuration.*\<\/h2\>'
+$page.Content -match '\<h2\>.*File Extension.*\<\/h2\>'
 $b = $content.IndexOf($Matches[0])
 
 # Find any included images
