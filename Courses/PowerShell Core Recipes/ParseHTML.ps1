@@ -13,10 +13,16 @@ $page.Content -match '\<h2\>.*Comparison.*\<\/h2\>'
 $a = $content.IndexOf($Matches[0])
 
 # Get the index of the 'Design' header
-$page.Content -match '\<h2\>.*File Extension.*\<\/h2\>'
+$page.Content -match '\<h2\>.*Extension.*\<\/h2\>'
 $b = $content.IndexOf($Matches[0])
 
-# Find any included images
+# Add that section to a dedicated variable
+$text = $content[$($a+1)..$($b-1)]
+
+# Check for images in this section
+$text | Where-Object {$_ -like '*img*'}
+
+# Find all image HTML on the page that is in this section
 $caughtImages = $content[$($a+1)..$($b-1)] | ForEach-Object{
     ForEach($image in $page.images){
         If($_ -like "*$($image.outerHTML)*"){
@@ -26,7 +32,7 @@ $caughtImages = $content[$($a+1)..$($b-1)] | ForEach-Object{
 }
 
 # Remove them
-$text = $content[$($a+1)..$($b-1)] | Where-Object {$caughtImages -notcontains $_}
+$text = $text | Where-Object {$caughtImages -notcontains $_}
 
 # Find any tables
 $tables = @()
@@ -82,8 +88,6 @@ For($x=0;$x -lt $text.Count; $x++){
 
 # Remove any '<' or '>' and content between
 $text = $text | ForEach-Object {($_ -replace '\<[^>]*\>','').Trim()}
-$text | Out-File .\test.txt
-code .\test.txt
 
 # Add the square brackets
 $text = $text | ForEach-Object {$_ -replace '&#91;','['} | ForEach-Object {$_ -replace '&#93;',']'}
@@ -103,6 +107,10 @@ For($t=0;$t -lt $headers.count-1;$t++){
     $page.Content -match "\<h2\>.*$($headers[$t+1]).*\<\/h2\>"
     $b = $content.IndexOf($Matches[0])
 
+    $text = $content[$($a+1)..$($b-1)]
+
+    $text | Where-Object {$_ -like '*img*'}
+
     $caughtImages = $content[$($a+1)..$($b-1)] | ForEach-Object{
         ForEach($image in $page.images){
             If($_ -like "*$($image.outerHTML)*"){
@@ -111,7 +119,7 @@ For($t=0;$t -lt $headers.count-1;$t++){
         }
     }
 
-    $text = $content[$($a+1)..$($b-1)] | Where-Object {$caughtImages -notcontains $_}
+    $text = $text | Where-Object {$caughtImages -notcontains $_}
 
     $tables = @()
     For($x=0;$x -lt $text.Count; $x++){
