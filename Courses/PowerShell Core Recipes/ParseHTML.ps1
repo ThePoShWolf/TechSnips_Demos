@@ -109,8 +109,6 @@ For($t=0;$t -lt $headers.count-1;$t++){
 
     $text = $content[$($a+1)..$($b-1)]
 
-    $text | Where-Object {$_ -like '*img*'}
-
     $caughtImages = $content[$($a+1)..$($b-1)] | ForEach-Object{
         ForEach($image in $page.images){
             If($_ -like "*$($image.outerHTML)*"){
