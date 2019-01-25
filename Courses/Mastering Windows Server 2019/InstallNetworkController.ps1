@@ -19,5 +19,5 @@ Install-WindowsFeature -Name NetworkController -IncludeManagementTools
 #endregion
 
 $node = New-NetworkControllerNodeObject -Name 'Net01' -Server 'Net01' -FaultDomain 'Fd:/Lab1/Rack1/Host1' -RestInterface 'ethernet'
-
+Install-NetworkControllerCluster -Node $NodeObject -ClusterAuthentication None
 Install-NetworkController -Node $node -ClientAuthentication Kerberos -ClientSecurityGroup 'Network Controller Clients'
