@@ -1,19 +1,12 @@
-#region prep
-$cred = Get-Credential
-$net01 = New-PSSession Net01 -Credential $cred
-$dc01 = New-PSSession DC01 -Credential $cred
-#endregion
-
 #region Prepare to deploy
 # Create Security group
-Invoke-Command -Session $dc01 -ScriptBlock {
+Invoke-Command -ComputerName 'netdc01' -ScriptBlock {
     New-ADGroup -GroupCategory Security -GroupScope Global -Name 'NCClients'
-    Add-ADGroupMember 'NCClients' -Members 'DC01$','DC02$'
+    Add-ADGroupMember 'NCClients' -Members 'netdc01$'
+
     New-ADGroup -GroupCategory Security -GroupScope Global -Name 'NCAdmins'
     Add-ADGroupMember 'NCAdmins' -Members Administrator
 }
-
-Enter-PSSession -Session $net01
 
 # Install the role
 Install-WindowsFeature -Name NetworkController -IncludeManagementTools
@@ -37,7 +30,7 @@ $certificate = Get-ChildItem Cert:\LocalMachine\My
 # Create the cluster
 $netControllerCluster = @{
     Node = $Node
-    ClusterAuthentication = Kerberos
+    ClusterAuthentication = 'Kerberos'
     ManagementSecurityGroup = 'NCAdmins'
 }
 Install-NetworkControllerCluster @netControllerCluster
@@ -45,7 +38,7 @@ Install-NetworkControllerCluster @netControllerCluster
 # Install the controller
 $netController = @{
     Node = $node
-    ClientAuthentication = Kerberos
+    ClientAuthentication = 'Kerberos'
     ClientSecurityGroup = 'NCClients'
     ServerCertificate = $certificate
 }
