@@ -11,7 +11,7 @@ Clear-Host
 
 #region Prep
 # Go to the correct location
-Set-Location D:\TechSnips\Demo
+Get-ChildItem D:\TechSnips\Demo
 
 # Path to ffmpeg
 $ffmpeg = '.\ffmpeg\bin\ffmpeg.exe'
@@ -32,7 +32,7 @@ $file2 = '.\setupAksClusterTake2Part2.mp4'
 & $ffmpeg -y -i $file2 -c copy -bsf:v h264_mp4toannexb -f mpegts temp2.ts
 
 # Temp file status
-(& $ffprobe .\temp1 -v quiet -of json -show_format | ConvertFrom-Json).format
+(& $ffprobe .\temp1.ts -v quiet -of json -show_format | ConvertFrom-Json).format
 
 # Concat them together
 & $ffmpeg -f mpegts -i "concat:temp1.ts|temp2.ts" -c copy -bsf:a aac_adtstoasc output.mp4
