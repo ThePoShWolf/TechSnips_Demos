@@ -77,12 +77,14 @@ Function Join-ffmpegMp4 {
 }
 
 # Usage
-Join-ffmpegMp4 -Files .\setupAksClusterTake2Part1.mp4, .\setupAksClusterTake2Part2.mp4 -OutputFile .\output.mp4 -TempFolder .\
+Join-ffmpegMp4 -Files .\setupAksClusterTake2Part1.mp4, .\setupAksClusterTake2Part2.mp4 -OutputFile .\output2.mp4 -TempFolder .\
 
-Remove-Item .\output.mp4
+# Verify
+(& $ffprobe output2.mp4 -v quiet -of json -show_format | ConvertFrom-Json).format
 
 # Or use the pipeline
-Get-ChildItem -Filter *.mp4 | Join-ffmpegMp4 -OutputFile .\output.mp4 -TempFolder .\
+Get-ChildItem -Filter *.mp4 | Join-ffmpegMp4 -OutputFile .\output3.mp4 -TempFolder .\
 
-Get-Item .\output.mp4
+# Verify
+(& $ffprobe output3.mp4 -v quiet -of json -show_format | ConvertFrom-Json).format
 #endregion
