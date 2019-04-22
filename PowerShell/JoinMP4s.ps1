@@ -57,13 +57,15 @@ Function Join-ffmpegMp4 {
         [string]$ffmpeg = 'D:\TechSnips\Demo\ffmpeg\bin\ffmpeg.exe'
     )
     Begin{
-        $outFiles = @()
+        [string[]]$outFiles = @()
     }
     Process {
-        # Create all the tmp files
-        $tmpFile = "$($TempFolder.FullName)\$($Files.BaseName).ts"
-        & $ffmpeg -y -i "$($Files.FullName)" -c copy -bsf:v h264_mp4toannexb -f mpegts $tmpFile -v quiet
-        $outFiles += $tmpFile
+        foreach ($file in $Files){
+            # Create all the tmp files
+            $tmpFile = "$($TempFolder.FullName)$($file.BaseName).ts"
+            & $ffmpeg -y -i "$($file.FullName)" -c copy -bsf:v h264_mp4toannexb -f mpegts $tmpFile -v quiet
+            [string[]]$outFiles += $tmpFile
+        }
     }
     End {
         # Join them
@@ -77,7 +79,8 @@ Function Join-ffmpegMp4 {
 }
 
 # Usage
-Join-ffmpegMp4 -Files .\setupAksClusterTake2Part1.mp4, .\setupAksClusterTake2Part2.mp4 -OutputFile .\output2.mp4 -TempFolder .\
+$files = 'D:\TechSnips\Demo\setupAksClusterTake2Part1.mp4', 'D:\TechSnips\Demo\setupAksClusterTake2Part2.mp4'
+Join-ffmpegMp4 -Files $files -OutputFile .\output2.mp4 -TempFolder .\
 
 # Verify
 (& $ffprobe output2.mp4 -v quiet -of json -show_format | ConvertFrom-Json).format
